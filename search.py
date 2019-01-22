@@ -1,0 +1,1 @@
+# hier sind die search pattern drin wenn user nach etwas suchen
