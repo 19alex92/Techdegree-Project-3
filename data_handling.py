@@ -1,12 +1,4 @@
-class input_user:
-    
-    def __init__(self, text):
-        self.text = text
 
-    def input_def(self, text):
-        
-        self.user_input = input(text, ">  ")
-        return self.user_input
 # has to get input from the user 
 
 
