@@ -1,4 +1,3 @@
-#from data_handling import WriteToCsv
 import csv
 import os
 
@@ -7,39 +6,29 @@ def clear_screen():
 
 
 def add_entry():
-    #input_csv = {"Date": None, "Title Task": None, "Time spent": None, "Notes": None}
     #clear_screen()
     print("What is the date of the task?")
     date = input("  > ")
-    #input_csv.update({"Date": date})
     
     print("What is the task titel?")
     task = input("  > ")
-    #input_csv.update({"Title Task": task})
     
     print("How much time in minutes?")
     time = input("  > ")
-    #input_csv.update({"Time spent": time})
     
     print("Additional notes...if you dont have any notes please press enter")
     notes = input("  > ")
-    #input_csv.update({"Notes": notes})
-    
-    with open('log.csv', 'w', newline='') as file:                  
+
+
+    with open('log.csv', 'a', newline='') as file: 
+        file_is_empty = os.stat('log.csv').st_size == 0                 
         fieldnames = ['Date', 'Title Task', 'Time spent', 'Notes']
         writer = csv.DictWriter(file, fieldnames=fieldnames)
 
-        writer.writeheader()
-        # vielleicht eine for loop
+        if file_is_empty: 
+            writer.writeheader()
         writer.writerow({'Date': date, 'Title Task': task, 'Time spent': time, 'Notes': notes})
         
-        # odder mit setattr machen
-        
-        
-        #writer = csv.writer(file)
-        #for key, value in input_csv.items():
-         #   writer.writerow([key, value])
-
 
 def search_entry():
     #clear_screen()
@@ -64,6 +53,7 @@ def search_entry():
     elif input_search == "f":
         main_menue()
 
+
 def main_menue():
 
     while True:
@@ -72,7 +62,7 @@ def main_menue():
         print("WORK LOG")
         print("What would you like to do?")
         print("a) Add new entry")
-        print("b) Search in existing entries")
+        print("b) Search for an existing entry")
         print("c) Quit programm")
         input_menue = input("  > ")
         input_menue = input_menue.lower()
