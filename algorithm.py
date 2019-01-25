@@ -15,9 +15,6 @@ class Search:
 
     def search(self, initial_file, search_file, key1, key2, regex, input_user):
         iteration = 0
-        
-        #pattern = re.search(r'[\w*\d*]', initial_file[0]['Title'])
-        #print(pattern)
        
         for data in initial_file:
             key_iter = 0
