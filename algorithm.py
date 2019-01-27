@@ -62,12 +62,21 @@ class Search:
 # Diese Menü wird nachher dafür sein um das ergebnis auf die Ergebnisseite zu drucken
     def menue(self, search_file):
         self.clear_screen()
-        total_page = 0
-        for iteration in range(len(search_file)):
+        iteration = 0
+        total_page = len(search_file)
+        current_page = 1
+        while True:
             menue_file = search_file[iteration]
             for key, value in menue_file.items():
                 print(key,": ", value)
-            total_page += 1
-        print(" Result 1 of {}".format(total_page))
-        print("[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
-        input(">  ")
+
+            print(" Result {} of {}".format(current_page, total_page))
+            print("[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
+            user_input = input(">  ")
+            if user_input.upper() == "N":
+                self.clear_screen()
+                iteration += 1
+                current_page += 1
+                continue
+
+
