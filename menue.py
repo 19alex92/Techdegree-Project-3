@@ -26,16 +26,10 @@ def add_entry():
     
     print("Additional notes...if you dont have any notes please press enter")
     notes = input("  > ")
-
-
-    with open('log.csv', 'a', newline='') as file: 
-        file_is_empty = os.stat('log.csv').st_size == 0                 
-        fieldnames = ['Date', 'Title', 'Time spent', 'Notes']
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-
-        if file_is_empty: 
-            writer.writeheader()
-        writer.writerow({'Date': date, 'Title': task, 'Time spent': time, 'Notes': notes})
+    print("Thank you! Do you want to submit your entry? Y/N")
+    decision = input(">  ")
+    if decision.upper() == 'Y':
+        start.add_to_file(date, task, time, notes)
         
 
 def search_entry():
@@ -49,6 +43,7 @@ def search_entry():
     date2 = None
     initial_file = []
     search_file = []
+    index_track = []
     start.open_file(initial_file)
     print("How would you like to search for an entry?")
     print("a) By Date")
@@ -65,9 +60,8 @@ def search_entry():
         print("Please enter a date")
         raw_date_input = input("Use the format DD/MM/YYYY:  ")
         input_user = datetime.datetime.strptime(raw_date_input, "%d/%m/%Y")
-        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user, index_track)
         print(search_file)
-        
     elif input_search == "b":
         # search between two dates
         # IDEE suche zwischen der Unix Timestamp
@@ -88,7 +82,7 @@ def search_entry():
             print("Ups seems like there is something wrong with your date, please try again!")
             raw_date2_input = input("Use the format DD/MM/YYYY:  ")
             date2 = datetime.datetime.strptime(raw_date2_input, "%d/%m/%Y")
-        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user, index_track)
         print(search_file)
         pass
 
@@ -97,30 +91,30 @@ def search_entry():
         key1 = 'Time spent'
         print("Please enter how much time the task took in minutes")
         input_user = input("EXAMPLE: Use the format 45 for 45 minutes:  ")
-        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user, index_track)
         print(search_file)
         
     elif input_search == "d":
         # search for string title or notes
-        key1 = 'Title'
+        key1 = 'Task name'
         key2 = 'Notes'
         print("Please enter a word")
         input_user = input("It can be in the Title or Notes:  ")
-        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
-        result_menue(search_file)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user, index_track)
+        result_menue(search_file, index_track)
         
     elif input_search == "e":
         # search for regex pattern
-        regex = ['Date', 'Title', 'Time spent', 'Notes']
+        regex = ['Date', 'Task name', 'Time spent', 'Notes']
         print("Please enter a regex pattern")
         input_user = input(":  ")
-        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user, index_track)
         print(search_file)
     elif input_search == "f":
         main_menue()
 
 
-def result_menue(search_file):
+def result_menue(search_file, index_track):
         clear_screen()
         iteration = 0
         total_page = len(search_file)
@@ -150,7 +144,15 @@ def result_menue(search_file):
                 pass
             if user_input.upper() == "D":
                 # Menue to delete entrys
-                start.delete_entry(menue_file, initial_file)
+                clear_screen()
+                print("\nAre you sure you want to delete this entry? Y/N")
+                user_input = input(">  ")
+                if user_input.upper() == "Y":
+                    delete_index = index_track[iteration]
+                    start.backup_file(initial_file)
+                    start.delete_entry(initial_file, delete_index)
+                    start.update_file(initial_file)
+                    break
                 continue
             if user_input.upper() == "R":
                 search_entry()
