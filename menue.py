@@ -39,7 +39,7 @@ def add_entry():
         
 
 def search_entry():
-    #clear_screen()
+    clear_screen()
     input_user = None
     key1 = None
     key2 = None
@@ -107,7 +107,7 @@ def search_entry():
         print("Please enter a word")
         input_user = input("It can be in the Title or Notes:  ")
         start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
-        start.menue(search_file)
+        result_menue(search_file)
         
     elif input_search == "e":
         # search for regex pattern
@@ -120,10 +120,47 @@ def search_entry():
         main_menue()
 
 
+def result_menue(search_file):
+        clear_screen()
+        iteration = 0
+        total_page = len(search_file)
+        current_page = 1
+        initial_file = []
+        start.open_file(initial_file)
+        while True:
+            menue_file = search_file[iteration]
+            for key, value in menue_file.items():
+                print(key,": ", value)
+            print(" Result {} of {}".format(current_page, total_page))
+            print("[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
+            user_input = input(">  ")
+            if user_input.upper() == "N":
+                if current_page < total_page:
+                    clear_screen()
+                    iteration += 1
+                    current_page += 1
+                    continue
+                else:
+                    clear_screen()
+                    iteration = 0
+                    current_page = 1
+                    continue
+            if user_input.upper() == "E":
+                # Menue to edit entrys
+                pass
+            if user_input.upper() == "D":
+                # Menue to delete entrys
+                start.delete_entry(menue_file, initial_file)
+                continue
+            if user_input.upper() == "R":
+                search_entry()
+                break
+
+
 def main_menue():
 
     while True:
-        #clear_screen()
+        clear_screen()
         print("WORK LOG")
         print("What would you like to do?")
         print("a) Add new entry")

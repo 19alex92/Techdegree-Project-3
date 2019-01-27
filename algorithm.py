@@ -6,7 +6,6 @@ import re
 
 class Search:
 
-    
     def clear_screen(self):
         os.system("cls" if os.name == "nt" else "clear")
 
@@ -58,25 +57,14 @@ class Search:
                 iteration += 1
 
 
+    def edit_entry(self):
+        pass
 
-# Diese Menü wird nachher dafür sein um das ergebnis auf die Ergebnisseite zu drucken
-    def menue(self, search_file):
+    def delete_entry(self, menue_file, initial_file):
         self.clear_screen()
-        iteration = 0
-        total_page = len(search_file)
-        current_page = 1
-        while True:
-            menue_file = search_file[iteration]
-            for key, value in menue_file.items():
-                print(key,": ", value)
-
-            print(" Result {} of {}".format(current_page, total_page))
-            print("[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
-            user_input = input(">  ")
-            if user_input.upper() == "N":
-                self.clear_screen()
-                iteration += 1
-                current_page += 1
-                continue
-
-
+        for key, value in menue_file.items():
+            print(key,": ", value)
+        print("\nAre you sure you want to delete this entry? Y/N")
+        user_input = input(">  ")
+        if user_input.upper() == "Y":
+            initial_file
