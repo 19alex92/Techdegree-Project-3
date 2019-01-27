@@ -1,4 +1,5 @@
 import csv
+import datetime
 import re
 
 
@@ -25,16 +26,17 @@ class Search:
                 search_file.append(dict(data))
                 iteration += 1
             elif regex:
-
                 for _ in regex:
-                    pattern = re.search(r'[test]', initial_file[iteration][regex[key_iter]])
-                    if pattern.group() in initial_file[iteration][regex[key_iter]]:
+                    pattern = re.search(input_user, initial_file[iteration][regex[key_iter]])
+                    if pattern is None:
+                        key_iter += 1
+                        continue
+                    elif pattern.group() in initial_file[iteration][regex[key_iter]]:
                         search_file.append(dict(initial_file[iteration]))
                         key_iter += 1
                         break
                     else:
                         key_iter += 1
-                
                 iteration += 1
             else:
                 iteration += 1

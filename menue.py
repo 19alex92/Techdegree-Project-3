@@ -52,7 +52,9 @@ def search_entry():
     print("e) By regex pattern")
     print("f) Back to main menue")
     input_search = input("  > ")
+
     if input_search == "a":
+        # search by a date
         key1 = 'Date'
         print("Please enter a date")
         input_user = input("Use the format DD/MM/YYYY:  ")
@@ -60,10 +62,12 @@ def search_entry():
         print(search_file)
         
     elif input_search == "b":
-        # search between two dates IDEE aus 21-05-2019 wird 21052019 und dann wird geprüft if >= than search
+        # search between two dates
+        # IDEE suche zwischen der Unix Timestamp
         pass
 
     elif input_search == "c":
+        # search for time spent
         key1 = 'Time spent'
         print("Please enter how much time the task took in minutes")
         input_user = input("EXAMPLE: Use the format 45 for 45 minutes:  ")
