@@ -94,10 +94,19 @@ class Search:
                 iteration += 1
 
 
-    def edit_entry(self):
-        pass
+    def edit_entry(self, initial_file, delete_index, input_key, input_user):
+        if input_key == 1:
+            input_key = 'Date'
+        elif input_key == 2:
+            input_key = 'Task name'
+        elif input_key == 3:
+            input_key = 'Time spent'
+        elif input_key == 4:
+            input_key = 'Notes'
+        initial_file[delete_index].update(input_key: input_user)
+        
 
     def delete_entry(self, initial_file, delete_index):
-            del initial_file[delete_index]
-            return initial_file
-            
+        del initial_file[delete_index]
+        return initial_file
+        

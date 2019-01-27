@@ -141,7 +141,16 @@ def result_menue(search_file, index_track):
                     continue
             if user_input.upper() == "E":
                 # Menue to edit entrys
-                pass
+                print("Which entry would you like to edit?")
+                print("(1)Date, (2)Task name, (3)Time spent, (4)Notes")
+                input_key = int(input(">  "))
+                print("Please type in your updated entry")
+                input_user = input(">  ")
+                delete_index = index_track[iteration]
+                start.edit_entry(initial_file, delete_index, input_key, input_user)
+                start.backup_file(initial_file)
+                start.update_file(initial_file)
+                
             if user_input.upper() == "D":
                 # Menue to delete entrys
                 clear_screen()
