@@ -1,4 +1,5 @@
 import csv
+import datetime
 import os
 import re
 
@@ -14,7 +15,8 @@ def clear_screen():
 def add_entry():
     #clear_screen()
     print("What is the date of the task?")
-    date = input("  > ")
+    raw_date = input("Use the format DD/MM/YYYY  > ")
+    date = datetime.datetime.strptime(raw_date, "%d/%m/%Y")
     
     print("What is the task titel?")
     task = input("  > ")
@@ -38,9 +40,13 @@ def add_entry():
 
 def search_entry():
     #clear_screen()
+    input_user = None
     key1 = None
     key2 = None
     regex = None
+    date_search = None
+    date1 = None
+    date2 = None
     initial_file = []
     search_file = []
     start.open_file(initial_file)
@@ -55,15 +61,35 @@ def search_entry():
 
     if input_search == "a":
         # search by a date
-        key1 = 'Date'
+        date_search = 'Date'
         print("Please enter a date")
-        input_user = input("Use the format DD/MM/YYYY:  ")
-        start.search(initial_file, search_file, key1, key2, regex, input_user)
+        raw_date_input = input("Use the format DD/MM/YYYY:  ")
+        input_user = datetime.datetime.strptime(raw_date_input, "%d/%m/%Y")
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
         print(search_file)
         
     elif input_search == "b":
         # search between two dates
         # IDEE suche zwischen der Unix Timestamp
+        date_search = 'Date'
+        print("Please enter the first date")
+        try:
+            raw_date1_input = input("Use the format DD/MM/YYYY:  ")
+            date1 = datetime.datetime.strptime(raw_date1_input, "%d/%m/%Y")
+        except ValueError:
+            print("Ups seems like there is something wrong with your date, please try again!")
+            raw_date1_input = input("Use the format DD/MM/YYYY:  ")
+            date1 = datetime.datetime.strptime(raw_date1_input, "%d/%m/%Y")
+        print("Please enter the second date")
+        try:
+            raw_date2_input = input("Use the format DD/MM/YYYY:  ")
+            date2 = datetime.datetime.strptime(raw_date2_input, "%d/%m/%Y")
+        except ValueError:
+            print("Ups seems like there is something wrong with your date, please try again!")
+            raw_date2_input = input("Use the format DD/MM/YYYY:  ")
+            date2 = datetime.datetime.strptime(raw_date2_input, "%d/%m/%Y")
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
+        print(search_file)
         pass
 
     elif input_search == "c":
@@ -71,7 +97,7 @@ def search_entry():
         key1 = 'Time spent'
         print("Please enter how much time the task took in minutes")
         input_user = input("EXAMPLE: Use the format 45 for 45 minutes:  ")
-        start.search(initial_file, search_file, key1, key2, regex, input_user)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
         print(search_file)
         
     elif input_search == "d":
@@ -80,15 +106,15 @@ def search_entry():
         key2 = 'Notes'
         print("Please enter a word")
         input_user = input("It can be in the Title or Notes:  ")
-        start.search(initial_file, search_file, key1, key2, regex, input_user)
-        print(search_file)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
+        start.menue(search_file)
         
     elif input_search == "e":
         # search for regex pattern
         regex = ['Date', 'Title', 'Time spent', 'Notes']
         print("Please enter a regex pattern")
         input_user = input(":  ")
-        start.search(initial_file, search_file, key1, key2, regex, input_user)
+        start.search(initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user)
         print(search_file)
     elif input_search == "f":
         main_menue()
