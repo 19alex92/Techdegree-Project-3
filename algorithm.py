@@ -50,16 +50,20 @@ class Search:
         os.remove('log_backup.csv')
 
 
-    def search(self, initial_file, search_file, key1, key2, regex, date_search, date1, date2, input_user, index_track):
+    def search(self, initial_file, search_file, task_name, task_notes, task_minutes, regex, date_search, date1, date2, input_user, index_track):
         iteration = 0
        
         for data in initial_file:
             key_iter = 0
-            if key1 and input_user in initial_file[iteration][key1]:
+            if task_name and input_user.upper() in initial_file[iteration][task_name].upper():
                 index_track.append(iteration)
                 search_file.append(dict(data))
                 iteration += 1
-            elif key2 and input_user in initial_file[iteration][key2]:
+            elif task_notes and input_user.upper() in initial_file[iteration][task_notes].upper():
+                index_track.append(iteration)
+                search_file.append(dict(data))
+                iteration += 1
+            elif task_minutes and input_user in initial_file[iteration][task_minutes]:
                 index_track.append(iteration)
                 search_file.append(dict(data))
                 iteration += 1
@@ -103,7 +107,7 @@ class Search:
             input_key = 'Time spent'
         elif input_key == 4:
             input_key = 'Notes'
-        initial_file[delete_index].update(input_key: input_user)
+        initial_file[delete_index].update({input_key: input_user})
         
 
     def delete_entry(self, initial_file, delete_index):
