@@ -9,6 +9,7 @@ class Search:
     def clear_screen(self):
         os.system("cls" if os.name == "nt" else "clear")
 
+
     def open_file(self, dict_files):
         with open('log.csv', newline='') as file:
             reader = csv.DictReader(file)
@@ -16,6 +17,7 @@ class Search:
             
             for row in data:
                 dict_files.append(dict(row))
+
 
     def add_to_file(self, date, task, time, notes):
         with open('log.csv', 'a', newline='') as file: 
@@ -50,11 +52,10 @@ class Search:
         os.remove('log_backup.csv')
 
 
-    def search(self, initial_file, search_file, task_name, task_notes, task_minutes, regex, date_search, date1, date2, input_user, index_track):
+    def search_string(self, initial_file, search_file, task_name, task_notes, input_user, index_track):
         iteration = 0
-       
+
         for data in initial_file:
-            key_iter = 0
             if task_name and input_user.upper() in initial_file[iteration][task_name].upper():
                 index_track.append(iteration)
                 search_file.append(dict(data))
@@ -63,25 +64,49 @@ class Search:
                 index_track.append(iteration)
                 search_file.append(dict(data))
                 iteration += 1
-            elif task_minutes and input_user in initial_file[iteration][task_minutes]:
+            else:
+                iteration += 1
+
+            
+    def search_time(self, initial_file, search_file, task_minutes, input_user, index_track):
+        iteration = 0
+
+        for data in initial_file:
+            if task_minutes and input_user in initial_file[iteration][task_minutes]:
                 index_track.append(iteration)
                 search_file.append(dict(data))
                 iteration += 1
-            elif regex:
-                for _ in regex:
-                    pattern = re.search(input_user, initial_file[iteration][regex[key_iter]])
-                    if pattern is None:
-                        key_iter += 1
-                        continue
-                    elif pattern.group() in initial_file[iteration][regex[key_iter]]:
-                        index_track.append(iteration)
-                        search_file.append(dict(initial_file[iteration]))
-                        key_iter += 1
-                        break
-                    else:
-                        key_iter += 1
+            else:
                 iteration += 1
-            elif date_search:
+
+
+    def search_regex(self, initial_file, search_file, regex, input_user, index_track):
+        iteration = 0
+       
+        for _ in initial_file:
+            key_iter = 0
+            if regex:
+                    for _ in regex:
+                        pattern = re.search(input_user, initial_file[iteration][regex[key_iter]])
+                        if pattern is None:
+                            key_iter += 1
+                            continue
+                        elif pattern.group() in initial_file[iteration][regex[key_iter]]:
+                            index_track.append(iteration)
+                            search_file.append(dict(initial_file[iteration]))
+                            key_iter += 1
+                            break
+                        else:
+                            key_iter += 1
+                    iteration += 1
+            else:
+                iteration += 1
+
+
+    def search_date(self, initial_file, search_file, date_search, date1, date2, input_user, index_track):
+        iteration = 0
+        for data in initial_file:
+            if date_search:
                 if str(input_user) == initial_file[iteration][date_search]:
                     index_track.append(iteration)
                     search_file.append(dict(data))
@@ -96,6 +121,13 @@ class Search:
                         iteration += 1
             else:
                 iteration += 1
+        
+        iteration = 0
+        for value in search_file[iteration]['Date']: # evlt lösung .items() bzw. .values()
+            print(value)
+            input("")
+            search_file[iteration].update({'Date': value.strftime('%d/%m/%Y')})
+            iteration += 1
 
 
     def edit_entry(self, initial_file, delete_index, input_key, input_user):

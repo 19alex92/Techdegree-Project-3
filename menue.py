@@ -67,19 +67,12 @@ def add_entry():
         
 
 def search_entry():
-    input_user = None
-    task_name = None
-    task_notes = None
-    task_minutes = None
-    regex = None
-    date_search = None
     date1 = None
     date2 = None
     initial_file = []
     search_file = []
     index_track = []
     start.open_file(initial_file)
-
 
     while True:
         clear_screen()
@@ -100,7 +93,7 @@ def search_entry():
             raw_date_input = input("Use the format DD/MM/YYYY:  ")
             try:
                 input_user = datetime.datetime.strptime(raw_date_input, "%d/%m/%Y")
-                start.search(initial_file, search_file, task_name, task_notes, task_minutes, regex, date_search, date1, date2, input_user, index_track)
+                start.search_date(initial_file, search_file, date_search, date1, date2, input_user, index_track)
                 result_menue(search_file, index_track)
                 break
             except ValueError:
@@ -144,7 +137,7 @@ def search_entry():
                     break
                 else:
                     continue
-            start.search(initial_file, search_file, task_name, task_notes, task_minutes, regex, date_search, date1, date2, input_user, index_track)
+            start.search_date(initial_file, search_file, date_search, date1, date2, input_user, index_track)
             result_menue(search_file, index_track)
             break
 
@@ -156,7 +149,7 @@ def search_entry():
             try:
                 input_user = int(input("EXAMPLE: Use the format 45 for 45 minutes:  "))
                 input_user = str(input_user)
-                start.search(initial_file, search_file, task_name, task_notes, task_minutes, regex, date_search, date1, date2, input_user, index_track)
+                start.search_time(initial_file, search_file, task_minutes, input_user, index_track)
                 result_menue(search_file, index_track)
                 break
             except ValueError:
@@ -177,7 +170,7 @@ def search_entry():
             try:
                 input_user = input(">  ")
                 if input_user:
-                    start.search(initial_file, search_file, task_name, task_notes, task_minutes, regex, date_search, date1, date2, input_user, index_track)
+                    start.search_string(initial_file, search_file, task_name, task_notes, input_user, index_track)
                     result_menue(search_file, index_track)
                     break
                 else:
@@ -196,7 +189,7 @@ def search_entry():
             try:
                 input_user = input(">  ")
                 if input_user:
-                    start.search(initial_file, search_file, task_name, task_notes, task_minutes, regex, date_search, date1, date2, input_user, index_track)
+                    start.search_regex(initial_file, search_file, regex, input_user, index_track)
                     result_menue(search_file, index_track)
                     break
                 else:
@@ -231,8 +224,8 @@ def result_menue(search_file, index_track):
                 break
             for key, value in menue_file.items():
                 print(key,": ", value)
-            print(" Result {} of {}".format(current_page, total_page))
-            print("[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
+            print("\nResult {} of {}".format(current_page, total_page))
+            print("\n[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
             user_input = input(">  ")
             if user_input.upper() == "N":
                 if current_page < total_page:
