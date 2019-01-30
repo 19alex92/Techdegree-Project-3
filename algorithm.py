@@ -27,8 +27,8 @@ class Search:
                 writer.writeheader()
             writer.writerow({'Date': date, 'Task name': task, 'Time spent': time, 'Notes': notes})
 
-    def backup_file(self, initial_file):
-        for data in initial_file:
+    def backup_file(self, initial_file):    # Creates a backup file in case
+        for data in initial_file:           # something goes bad while updating
             with open('log_backup.csv', 'a', newline='') as file:
                 file_is_empty = os.stat('log_backup.csv').st_size == 0
                 write = csv.DictWriter(file, data.keys())
@@ -97,6 +97,7 @@ class Search:
 
     def search_date(self, initial_file, search_file, date_search, date1, date2, input_user, index_track):
         iteration = 0
+
         for data in initial_file:
             if date_search:
                 if str(input_user) == initial_file[iteration][date_search]:
@@ -114,7 +115,7 @@ class Search:
             else:
                 iteration += 1
 
-    def format_date(self, search_file):
+    def format_date(self, search_file):  # Formates the date back to a nicer format
         for data in search_file:
             for value in data.values():
                 try:

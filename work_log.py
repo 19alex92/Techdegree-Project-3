@@ -223,7 +223,7 @@ def result_menue(search_file, index_track):
                 input("No results found, please press enter to continue")
                 break
             for key, value in menue_file.items():
-                print(key,": ", value)
+                print(key, ": ", value)
             print("\nResult {} of {}".format(current_page, total_page))
             print("\n[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
             user_input = input(">  ")
