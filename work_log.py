@@ -46,6 +46,8 @@ def add_entry():
             clear_screen()
             print("How much time did it take in rounded minutes?")
             time = int(input(">  "))
+            if time < 0:
+                raise ValueError
             break
         except ValueError:
             clear_screen()
@@ -71,9 +73,15 @@ def search_entry():
     initial_file = []
     search_file = []
     index_track = []
-    start.open_file(initial_file)
 
     while True:
+        try:
+            start.open_file(initial_file)
+        except FileNotFoundError:
+            clear_screen()
+            print("No file, please add entry befor search")
+            input("Press enter to continue")
+            break
         clear_screen()
         print("How would you like to search for an entry?")
         print("a) By Date")
