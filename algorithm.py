@@ -9,15 +9,13 @@ class Search:
     def clear_screen(self):
         os.system("cls" if os.name == "nt" else "clear")
 
-
     def open_file(self, dict_files):
         with open('log.csv', newline='') as file:
             reader = csv.DictReader(file)
             data = list(reader)
-            
+
             for row in data:
                 dict_files.append(dict(row))
-
 
     def add_to_file(self, date, task, time, notes):
         with open('log.csv', 'a', newline='') as file: 
@@ -29,7 +27,6 @@ class Search:
                 writer.writeheader()
             writer.writerow({'Date': date, 'Task name': task, 'Time spent': time, 'Notes': notes})
 
-
     def backup_file(self, initial_file):
         for data in initial_file:
             with open('log_backup.csv', 'a', newline='') as file:
@@ -38,7 +35,6 @@ class Search:
                 if file_is_empty:
                     write.writeheader()
                 write.writerow(data)
-
 
     def update_file(self, initial_file):
         os.remove('log.csv')
@@ -50,7 +46,6 @@ class Search:
                     write.writeheader()
                 write.writerow(data)
         os.remove('log_backup.csv')
-
 
     def search_string(self, initial_file, search_file, task_name, task_notes, input_user, index_track):
         iteration = 0
@@ -67,7 +62,6 @@ class Search:
             else:
                 iteration += 1
 
-            
     def search_time(self, initial_file, search_file, task_minutes, input_user, index_track):
         iteration = 0
 
@@ -79,10 +73,9 @@ class Search:
             else:
                 iteration += 1
 
-
     def search_regex(self, initial_file, search_file, regex, input_user, index_track):
         iteration = 0
-       
+
         for _ in initial_file:
             key_iter = 0
             if regex:
@@ -102,7 +95,6 @@ class Search:
             else:
                 iteration += 1
 
-
     def search_date(self, initial_file, search_file, date_search, date1, date2, input_user, index_track):
         iteration = 0
         for data in initial_file:
@@ -121,18 +113,15 @@ class Search:
                         iteration += 1
             else:
                 iteration += 1
-        
 
+    def format_date(self, search_file):
         for data in search_file:
             for value in data.values():
-                output_date = datetime.datetime.strptime(value, "%Y-%m-%d %X")
-                print(output_date)
-                print(data)
-                print(value)
-                input("")
-                data.update({'Date': output_date.strftime('%d/%m/%Y')})
-                return search_file
-                
+                try:
+                    output_date = datetime.datetime.strptime(value, "%Y-%m-%d %X")
+                    data.update({'Date': output_date.strftime('%d/%m/%Y')})
+                except ValueError:
+                    continue
 
     def edit_entry(self, initial_file, delete_index, input_key, input_user):
         if input_key == 1:
@@ -144,9 +133,7 @@ class Search:
         elif input_key == 4:
             input_key = 'Notes'
         initial_file[delete_index].update({input_key: input_user})
-        
 
     def delete_entry(self, initial_file, delete_index):
         del initial_file[delete_index]
         return initial_file
-        
