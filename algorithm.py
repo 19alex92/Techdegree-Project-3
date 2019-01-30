@@ -122,13 +122,17 @@ class Search:
             else:
                 iteration += 1
         
-        iteration = 0
-        for value in search_file[iteration]['Date']: # evlt lösung .items() bzw. .values()
-            print(value)
-            input("")
-            search_file[iteration].update({'Date': value.strftime('%d/%m/%Y')})
-            iteration += 1
 
+        for data in search_file:
+            for value in data.values():
+                output_date = datetime.datetime.strptime(value, "%Y-%m-%d %X")
+                print(output_date)
+                print(data)
+                print(value)
+                input("")
+                data.update({'Date': output_date.strftime('%d/%m/%Y')})
+                return search_file
+                
 
     def edit_entry(self, initial_file, delete_index, input_key, input_user):
         if input_key == 1:
