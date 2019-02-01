@@ -25,7 +25,8 @@ class Search:
 
             if file_is_empty:
                 writer.writeheader()
-            writer.writerow({'Date': date, 'Task name': task, 'Time spent': time, 'Notes': notes})
+            writer.writerow({'Date': date, 'Task name': task,
+                             'Time spent': time, 'Notes': notes})
 
     def backup_file(self, initial_file):
         '''Creates a backup file in case someting goes bad while updating'''
@@ -39,7 +40,8 @@ class Search:
 
     def update_file(self, initial_file):
         '''Deletes the current file and updates it, in the end deletes the
-        backup file in case everything worked as expected'''
+           backup file in case everything worked as expected
+        '''
         os.remove('log.csv')
         for data in initial_file:
             with open('log.csv', 'a', newline='') as file:
@@ -50,44 +52,53 @@ class Search:
                 write.writerow(data)
         os.remove('log_backup.csv')
 
-    def search_string(self, initial_file, search_file, task_name, task_notes, input_user, index_track):
+    def search_string(self, initial_file, search_file,
+                      task_name, task_notes, input_user, index_track):
         iteration = 0
 
         for data in initial_file:
-            if task_name and input_user.upper() in initial_file[iteration][task_name].upper():
+            if (task_name and input_user.upper() in
+                    initial_file[iteration][task_name].upper()):
                 index_track.append(iteration)
                 search_file.append(dict(data))
                 iteration += 1
-            elif task_notes and input_user.upper() in initial_file[iteration][task_notes].upper():
+            elif (task_notes and input_user.upper() in
+                    initial_file[iteration][task_notes].upper()):
                 index_track.append(iteration)
                 search_file.append(dict(data))
                 iteration += 1
             else:
                 iteration += 1
 
-    def search_time(self, initial_file, search_file, task_minutes, input_user, index_track):
+    def search_time(self, initial_file, search_file,
+                    task_minutes, input_user, index_track):
         iteration = 0
 
         for data in initial_file:
-            if task_minutes and input_user in initial_file[iteration][task_minutes]:
+            if (task_minutes and input_user in
+                    initial_file[iteration][task_minutes]):
                 index_track.append(iteration)
                 search_file.append(dict(data))
                 iteration += 1
             else:
                 iteration += 1
 
-    def search_regex(self, initial_file, search_file, regex, input_user, index_track):
+    def search_regex(self, initial_file, search_file,
+                     regex, input_user, index_track):
         iteration = 0
 
         for _ in initial_file:
             key_iter = 0
             if regex:
                     for _ in regex:
-                        pattern = re.search(input_user, initial_file[iteration][regex[key_iter]])
+                        pattern = re.search(input_user,
+                                            initial_file[iteration]
+                                                        [regex[key_iter]])
                         if pattern is None:
                             key_iter += 1
                             continue
-                        elif pattern.group() in initial_file[iteration][regex[key_iter]]:
+                        elif (pattern.group() in
+                                initial_file[iteration][regex[key_iter]]):
                             index_track.append(iteration)
                             search_file.append(dict(initial_file[iteration]))
                             key_iter += 1
@@ -98,7 +109,8 @@ class Search:
             else:
                 iteration += 1
 
-    def search_date(self, initial_file, search_file, date_search, date1, date2, input_user, index_track):
+    def search_date(self, initial_file, search_file, date_search,
+                    date1, date2, input_user, index_track):
         iteration = 0
 
         for data in initial_file:
@@ -108,7 +120,10 @@ class Search:
                     search_file.append(dict(data))
                     iteration += 1
                 elif date1 and date2:
-                    saved_date = datetime.datetime.strptime(initial_file[iteration][date_search], "%Y-%m-%d %X")
+                    saved_date = datetime.datetime.strptime(initial_file
+                                                            [iteration]
+                                                            [date_search],
+                                                            "%Y-%m-%d %X")
                     if date1 <= saved_date and date2 >= saved_date:
                         index_track.append(iteration)
                         search_file.append(dict(data))
@@ -125,7 +140,8 @@ class Search:
         for data in search_file:
             for value in data.values():
                 try:
-                    output_date = datetime.datetime.strptime(value, "%Y-%m-%d %X")
+                    output_date = datetime.datetime.strptime(value,
+                                                             "%Y-%m-%d %X")
                     data.update({'Date': output_date.strftime('%d/%m/%Y')})
                 except ValueError:
                     continue

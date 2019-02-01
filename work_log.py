@@ -98,14 +98,18 @@ def search_entry():
             print("Please enter a date")
             raw_date_input = input("Use the format DD/MM/YYYY:  ")
             try:
-                input_user = datetime.datetime.strptime(raw_date_input, "%d/%m/%Y")
-                start.search_date(initial_file, search_file, date_search, date1, date2, input_user, index_track)
+                input_user = datetime.datetime.strptime(raw_date_input,
+                                                        "%d/%m/%Y")
+                start.search_date(initial_file, search_file, date_search,
+                                  date1, date2, input_user, index_track)
                 result_menue(search_file, index_track)
                 break
             except ValueError:
                 clear_screen()
-                print("Ups! Seems like '{}' isn't a valid date.".format(raw_date_input))
-                print("Press enter to try again or 'R' to return to the main menu.")
+                print("Ups! Seems like '{}' isn't a valid date."
+                      .format(raw_date_input))
+                print("Press enter to try again or 'R' "
+                      "to return to the main menu.")
                 user_input = input(">  ")
                 if user_input.upper() == "R":
                     break
@@ -122,8 +126,10 @@ def search_entry():
                 date1 = datetime.datetime.strptime(raw_date1_input, "%d/%m/%Y")
             except ValueError:
                 clear_screen()
-                print("Ups! Seems like '{}' isn't a valid date.".format(raw_date1_input))
-                print("Press enter to try again or 'R' to return to the main menu.")
+                print("Ups! Seems like '{}' isn't a valid date."
+                      .format(raw_date1_input))
+                print("Press enter to try again or 'R' "
+                      "to return to the main menu.")
                 user_input = input(">  ")
                 if user_input.upper() == "R":
                     break
@@ -136,14 +142,17 @@ def search_entry():
                 date2 = datetime.datetime.strptime(raw_date2_input, "%d/%m/%Y")
             except ValueError:
                 clear_screen()
-                print("Ups! Seems like '{}' isn't a valid date.".format(raw_date2_input))
-                print("Press enter to try again or 'R' to return to the main menu.")
+                print("Ups! Seems like '{}' isn't a valid date."
+                      .format(raw_date2_input))
+                print("Press enter to try again or 'R' "
+                      "to return to the main menu.")
                 user_input = input(">  ")
                 if user_input.upper() == "R":
                     break
                 else:
                     continue
-            start.search_date(initial_file, search_file, date_search, date1, date2, input_user, index_track)
+            start.search_date(initial_file, search_file, date_search,
+                              date1, date2, input_user, index_track)
             result_menue(search_file, index_track)
             break
 
@@ -153,14 +162,17 @@ def search_entry():
             task_minutes = 'Time spent'
             print("Please enter how much time the task took in minutes")
             try:
-                input_user = int(input("EXAMPLE: Use the format 45 for 45 minutes:  "))
+                input_user = int(input("EXAMPLE: Use the format "
+                                       "45 for 45 minutes:  "))
                 input_user = str(input_user)
-                start.search_time(initial_file, search_file, task_minutes, input_user, index_track)
+                start.search_time(initial_file, search_file,
+                                  task_minutes, input_user, index_track)
                 result_menue(search_file, index_track)
                 break
             except ValueError:
                 clear_screen()
-                print("Ups this doesn't seem to be a valid rounded minutes input")
+                print("Ups this doesn't seem to "
+                      "be a valid rounded minutes input")
                 input("Press enter to try again.")
                 continue
 
@@ -175,14 +187,16 @@ def search_entry():
             try:
                 input_user = input(">  ")
                 if input_user:
-                    start.search_string(initial_file, search_file, task_name, task_notes, input_user, index_track)
+                    start.search_string(initial_file, search_file, task_name,
+                                        task_notes, input_user, index_track)
                     result_menue(search_file, index_track)
                     break
                 else:
                     raise ValueError
             except ValueError:
                 clear_screen()
-                input("Seems like you havn't entered anything, press enter to try again.")
+                input("Seems like you havn't entered anything, "
+                      "press enter to try again.")
                 continue
 
         elif input_search == "e":
@@ -194,14 +208,16 @@ def search_entry():
             try:
                 input_user = input(">  ")
                 if input_user:
-                    start.search_regex(initial_file, search_file, regex, input_user, index_track)
+                    start.search_regex(initial_file, search_file,
+                                       regex, input_user, index_track)
                     result_menue(search_file, index_track)
                     break
                 else:
                     raise ValueError
             except ValueError:
                 clear_screen()
-                input("Seems like you havn't entered anything, press enter to try again.")
+                input("Seems like you havn't entered anything, "
+                      "press enter to try again.")
                 continue
 
         elif input_search == "f":
