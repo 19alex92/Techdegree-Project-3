@@ -11,7 +11,7 @@ def clear_screen():
 
 
 def add_entry():
-
+    '''Menu to add a new entry to the csv file'''
     while True:
         clear_screen()
         print("What is the date of the task?")
@@ -62,26 +62,25 @@ def add_entry():
     clear_screen()
     print("Thank you! Do you want to submit your entry? Y/N")
     decision = input(">  ")
+
     if decision.upper() == 'Y':
         start.add_to_file(date, task, time, notes)
 
+    clear_screen()
+    input("Your entry has been added successfully! Press enter to continue")
+
 
 def search_entry():
+    '''Menu to search for an existing entry'''
     date1 = None
     date2 = None
     input_user = None
     initial_file = []
     search_file = []
     index_track = []
+    start.open_file(initial_file)
 
     while True:
-        try:
-            start.open_file(initial_file)
-        except FileNotFoundError:
-            clear_screen()
-            print("No file, please add entry befor search")
-            input("Press enter to continue")
-            break
         clear_screen()
         print("How would you like to search for an entry?")
         print("a) By Date")
@@ -101,13 +100,12 @@ def search_entry():
             try:
                 input_user = datetime.datetime.strptime(raw_date_input, "%d/%m/%Y")
                 start.search_date(initial_file, search_file, date_search, date1, date2, input_user, index_track)
-                start.format_date(search_file)
                 result_menue(search_file, index_track)
                 break
             except ValueError:
                 clear_screen()
                 print("Ups! Seems like '{}' isn't a valid date.".format(raw_date_input))
-                print("Press enter to try again or 'R' to return to the main menue.")
+                print("Press enter to try again or 'R' to return to the main menu.")
                 user_input = input(">  ")
                 if user_input.upper() == "R":
                     break
@@ -125,7 +123,7 @@ def search_entry():
             except ValueError:
                 clear_screen()
                 print("Ups! Seems like '{}' isn't a valid date.".format(raw_date1_input))
-                print("Press enter to try again or 'R' to return to the main menue.")
+                print("Press enter to try again or 'R' to return to the main menu.")
                 user_input = input(">  ")
                 if user_input.upper() == "R":
                     break
@@ -139,14 +137,13 @@ def search_entry():
             except ValueError:
                 clear_screen()
                 print("Ups! Seems like '{}' isn't a valid date.".format(raw_date2_input))
-                print("Press enter to try again or 'R' to return to the main menue.")
+                print("Press enter to try again or 'R' to return to the main menu.")
                 user_input = input(">  ")
                 if user_input.upper() == "R":
                     break
                 else:
                     continue
             start.search_date(initial_file, search_file, date_search, date1, date2, input_user, index_track)
-            start.format_date(search_file)
             result_menue(search_file, index_track)
             break
 
@@ -168,7 +165,7 @@ def search_entry():
                 continue
 
         elif input_search == "d":
-            # search for string title or notes
+            # search for string in title or notes
             clear_screen()
             input_user = None
             task_name = 'Task name'
@@ -218,77 +215,79 @@ def search_entry():
 
 
 def result_menue(search_file, index_track):
-        iteration = 0
-        total_page = len(search_file)
-        current_page = 1
-        initial_file = []
-        start.open_file(initial_file)
-        while True:
-            clear_screen()
-            try:
-                menue_file = search_file[iteration]
-            except IndexError:
-                input("No results found, please press enter to continue")
-                break
-            for key, value in menue_file.items():
-                print(key, ": ", value)
-            print("\nResult {} of {}".format(current_page, total_page))
-            print("\n[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
-            user_input = input(">  ")
-            if user_input.upper() == "N":
-                if current_page < total_page:
-                    clear_screen()
-                    iteration += 1
-                    current_page += 1
-                    continue
-                else:
-                    clear_screen()
-                    iteration = 0
-                    current_page = 1
-                    continue
-            elif user_input.upper() == "E":
-                # Menue to edit entrys
+    '''Displays the search results in a meaningful way'''
+    iteration = 0
+    total_page = len(search_file)
+    current_page = 1
+    initial_file = []
+    start.open_file(initial_file)
+    start.format_date(search_file)
+    while True:
+        clear_screen()
+        try:
+            menue_file = search_file[iteration]
+        except IndexError:
+            input("No results found, please press enter to continue")
+            break
+        for key, value in menue_file.items():
+            print(key, ": ", value)
+        print("\nResult {} of {}".format(current_page, total_page))
+        print("\n[N]ext, [E]dit, [D]elete, [R]eturn to search menu")
+        user_input = input(">  ")
+        if user_input.upper() == "N":
+            if current_page < total_page:
                 clear_screen()
-                print("Which entry would you like to edit?")
-                print("(1)Date, (2)Task name, (3)Time spent, (4)Notes")
-                input_key = int(input(">  "))
-                clear_screen()
-                print("Please type in your updated entry and press enter")
-                input_user = input(">  ")
-                delete_index = index_track[iteration]
-                start.edit_entry(initial_file, delete_index, input_key, input_user)
-                start.backup_file(initial_file)
-                start.update_file(initial_file)
-                clear_screen()
-                input("Update sucessful! Press enter to continue")
-                break
-
-            elif user_input.upper() == "D":
-                # Menue to delete entrys
-                clear_screen()
-                print("\nAre you sure you want to delete this entry? Y/N")
-                user_input = input(">  ")
-                if user_input.upper() == "Y":
-                    delete_index = index_track[iteration]
-                    start.backup_file(initial_file)
-                    start.delete_entry(initial_file, delete_index)
-                    start.update_file(initial_file)
-                    clear_screen()
-                    input("Deleting successful press enter to continue")
-                    break
+                iteration += 1
+                current_page += 1
                 continue
-            elif user_input.upper() == "R":
-                search_entry()
-                break
             else:
                 clear_screen()
-                print("Ups this doesn't seem to be a valid input.")
-                input("Press enter to try again")
+                iteration = 0
+                current_page = 1
                 continue
+        elif user_input.upper() == "E":
+            # Menue to edit entrys
+            clear_screen()
+            print("Which entry would you like to edit?")
+            print("(1)Date, (2)Task name, (3)Time spent, (4)Notes")
+            input_key = int(input(">  "))
+            clear_screen()
+            print("Please type in your updated entry and press enter")
+            input_user = input(">  ")
+            delete_index = index_track[iteration]
+            start.edit_entry(initial_file, delete_index, input_key, input_user)
+            start.backup_file(initial_file)
+            start.update_file(initial_file)
+            clear_screen()
+            input("Update sucessful! Press enter to continue")
+            break
+
+        elif user_input.upper() == "D":
+            # Menue to delete entrys
+            clear_screen()
+            print("\nAre you sure you want to delete this entry? Y/N")
+            user_input = input(">  ")
+            if user_input.upper() == "Y":
+                delete_index = index_track[iteration]
+                start.backup_file(initial_file)
+                start.delete_entry(initial_file, delete_index)
+                start.update_file(initial_file)
+                clear_screen()
+                input("Deleting successful press enter to continue")
+                break
+            continue
+        elif user_input.upper() == "R":
+            search_entry()
+            break
+        else:
+            clear_screen()
+            print("Ups this doesn't seem to be a valid input.")
+            input("Press enter to try again")
+            continue
 
 
-def main_menue():
-
+def main_menu():
+    '''Displays the main menu of the application'''
     while True:
         clear_screen()
         print("WORK LOG")
@@ -301,8 +300,14 @@ def main_menue():
             add_entry()
             continue
         elif input_menue.upper() == "B":
-            search_entry()
-            continue
+            try:
+                search_entry()
+                continue
+            except FileNotFoundError:
+                clear_screen()
+                print("No file, please add entry before search")
+                input("Press enter to continue")
+                continue
         elif input_menue.upper() == "C":
             break
         else:
@@ -313,4 +318,4 @@ def main_menue():
 
 
 if __name__ == "__main__":
-    main_menue()
+    main_menu()

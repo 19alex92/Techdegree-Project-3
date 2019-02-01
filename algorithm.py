@@ -18,17 +18,18 @@ class Search:
                 dict_files.append(dict(row))
 
     def add_to_file(self, date, task, time, notes):
-        with open('log.csv', 'a', newline='') as file: 
-            file_is_empty = os.stat('log.csv').st_size == 0                 
+        with open('log.csv', 'a', newline='') as file:
+            file_is_empty = os.stat('log.csv').st_size == 0
             fieldnames = ['Date', 'Task name', 'Time spent', 'Notes']
             writer = csv.DictWriter(file, fieldnames=fieldnames)
 
-            if file_is_empty: 
+            if file_is_empty:
                 writer.writeheader()
             writer.writerow({'Date': date, 'Task name': task, 'Time spent': time, 'Notes': notes})
 
-    def backup_file(self, initial_file):    # Creates a backup file in case
-        for data in initial_file:           # something goes bad while updating
+    def backup_file(self, initial_file):
+        '''Creates a backup file in case someting goes bad while updating'''
+        for data in initial_file:
             with open('log_backup.csv', 'a', newline='') as file:
                 file_is_empty = os.stat('log_backup.csv').st_size == 0
                 write = csv.DictWriter(file, data.keys())
@@ -37,6 +38,8 @@ class Search:
                 write.writerow(data)
 
     def update_file(self, initial_file):
+        '''Deletes the current file and updates it, in the end deletes the
+        backup file in case everything worked as expected'''
         os.remove('log.csv')
         for data in initial_file:
             with open('log.csv', 'a', newline='') as file:
@@ -112,10 +115,13 @@ class Search:
                         iteration += 1
                     else:
                         iteration += 1
+                else:
+                    iteration += 1
             else:
                 iteration += 1
 
-    def format_date(self, search_file):  # Formates the date back to a nicer format
+    def format_date(self, search_file):
+        '''Formates the date back to a nice format'''
         for data in search_file:
             for value in data.values():
                 try:
